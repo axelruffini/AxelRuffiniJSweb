@@ -1,0 +1,27 @@
+
+@import "mixin";
+
+
+.inicio_tarjeta1{
+    @include tarjeta(500px, 60%, white)
+
+}
+
+.inicio_tarjeta2{
+    @include tarjeta(500px, 20%, white)
+
+}
+
+.inicio_tarjeta3{
+    @include tarjeta(20px, 85%, white)
+}
+
+.inicio_tarjeta4{
+    @include tarjeta(20px, 25%, rgb(148, 255, 90))
+}
+
+.grupo_tarjetas{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
