@@ -3,17 +3,25 @@ let tareas = [];
 let finalizadas = 0;
 let SinFinalizar = 0;
 
-for (let contadorTareas = 1; contadorTareas <= cantTareas; contadorTareas++) {
-    tareas[tareas.length] = prompt("Ingrese la tarea: ");
+function agregarTarea() {
+    tareas.push(prompt("Ingrese la tarea: "));
 }
 
-for (let contadorTareas2 = 0; contadorTareas2 < tareas.length; contadorTareas2++) {
-    let tareaFinalizada = prompt("Finalizo la tarea " + tareas[contadorTareas2] + " ? Ingrese Si o No: ");
+function preguntarFinalizada(tarea) {
+    let tareaFinalizada = prompt("Finalizo la tarea " + tarea + " ? Ingrese Si o No: ");
     if (tareaFinalizada === "si") {
         finalizadas++;
     } else {
         SinFinalizar++;
     }
+}
+
+for (let contadorTareas = 1; contadorTareas <= cantTareas; contadorTareas++) {
+    agregarTarea();
+}
+
+for (let contadorTareas2 = 0; contadorTareas2 < tareas.length; contadorTareas2++) {
+    preguntarFinalizada(tareas[contadorTareas2]);
 }
 
 let porcentajeFinalizadas = (finalizadas / cantTareas) * 100;
