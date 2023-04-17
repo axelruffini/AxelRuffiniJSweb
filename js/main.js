@@ -12,14 +12,19 @@ function agregarTarea() { //Objeto para el almacenamiento de tareas
   tareas.push({nombre: tareaNombre, descripcion: tareaDescripcion});
 }
 
-function preguntarFinalizada(tarea) { //Objeto para el almacenamiento tareas finalizadas o sin finalizar
-  let tareaFinalizada = prompt("Finalizo la tarea " + tarea.nombre + " ? Ingrese Si o No: ");
-  if (tareaFinalizada === "si") {
+function preguntarFinalizada(tarea) {
+  let tareaFinalizada;
+  do {
+    tareaFinalizada = prompt("¿Finalizó la tarea " + tarea.nombre + "? Ingrese Si o No: ").toUpperCase();
+  } while (tareaFinalizada !== "SI" && tareaFinalizada !== "NO");
+  
+  if (tareaFinalizada === "SI") {
     finalizadas++;
   } else {
     SinFinalizar++;
   }
 }
+
 
 ///////////////////////////////////////////////  Procesamiento de los datos   /////////////////////////////////////////////////////////
 for (let contadorTareas = 0; contadorTareas < cantTareas; contadorTareas++) { //Cuadro de texto para ingresar las tareas
