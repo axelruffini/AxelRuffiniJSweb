@@ -1,45 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Encontraras hermosos cuadros subidos por la comunidad los cuales se pueden comprar y coleccionar">
+<html>
 
-    <title>Inicio | Galeria</title>
+<head>
+    <title>Lista de tareas</title>
     <link rel="stylesheet" href="./assets/scss/style.css">
 </head>
-<body class="Body1">
-    <header>
-        <h2 class="t1 headerTitulo">Axel Ruffini</h2>
-    </header>
 
-    <main>
-        <div class="grupo_tarjetas">
-            <div class="inicio_tarjeta1">
-                <h1 class="t2">Lista de tareas</h1>
-                <div class="inicio_tarjeta3">
-                    <h1 class="t4">Tarea 1</h1>
-                </div>
-                <div class="inicio_tarjeta3">
-                    <h1 class="t4">Tarea 2</h1>
-                </div>
-                <div class="inicio_tarjeta3">
-                    <h1 class="t4">Tarea 3</h1>
-                </div>
-                <div class="inicio_tarjeta4">
-                    <h1 class="t4">Agregar nueva tarea</h1>
-                </div>
-            </div>
-            <div class="inicio_tarjeta2">
-                <h1 class="t3">Descripcion de la tarea</h1>
-            </div>
-        </div>
-    </main>
-
-    <footer>
-    </footer>
-    
+<body class="grupo_tarjetas">
+    <h1 class="t1">Lista de tareas</h1>
+    <form class="t3 inicio_tarjeta1">
+        <label for="nombre-tarea">Nombre de la tarea:</label>
+        <input type="text" id="nombre-tarea" name="nombre-tarea">
+        <br><br>
+        <label for="desc-tarea">Descripción de la tarea:</label>
+        <input type="text" id="desc-tarea" name="desc-tarea">
+        <br><br>
+        <button type="submit" class="btn">Agregar</button>
+    </form>
+    <div id="contenedor-tareas" class="inicio_tarjeta2"></div>
     <script src="./js/main.js"></script>
 </body>
+
 </html>
