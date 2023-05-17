@@ -4,6 +4,18 @@ const nombreTareaInput = document.querySelector('#nombre-tarea');
 const descTareaInput = document.querySelector('#desc-tarea');
 const contenedorTareas = document.querySelector('#contenedor-tareas');
 
+// Función de orden superior para agregar funcionalidad de eliminar tarea
+function agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index) {
+  const botonEliminar = document.createElement('button');
+  botonEliminar.textContent = 'Eliminar';
+  botonEliminar.addEventListener('click', function () {
+    tareaDiv.remove();
+    tareas.splice(index, 1);
+    guardarTareasEnStorage(tareas);
+  });
+  tareaDiv.appendChild(botonEliminar);
+}
+
 // Maneja el evento de envío del formulario
 formulario.addEventListener('submit', function (evento) {
   // Prevenir la recarga de la página
@@ -24,12 +36,16 @@ formulario.addEventListener('submit', function (evento) {
     tareaDiv.appendChild(descTareaNode);
     contenedorTareas.appendChild(tareaDiv);
 
+    // Agregar la funcionalidad de eliminar tarea
+    const tareas = obtenerTareasDelStorage();
+    const index = tareas.length;
+    agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index);
+
     // Limpiar los campos de nombre de tarea y descripción
     nombreTareaInput.value = '';
     descTareaInput.value = '';
 
     // Guardar la tarea en el almacenamiento local
-    const tareas = obtenerTareasDelStorage();
     tareas.push({ nombre: nombreTareaTexto, descripcion: descTareaTexto });
     guardarTareasEnStorage(tareas);
   }
@@ -37,12 +53,7 @@ formulario.addEventListener('submit', function (evento) {
 
 // Obtiene las tareas almacenadas en el almacenamiento local
 function obtenerTareasDelStorage() {
-  let tareas = localStorage.getItem('tareas');
-  if (!tareas) {
-    tareas = [];
-  } else {
-    tareas = JSON.parse(tareas);
-  }
+  const tareas = JSON.parse(localStorage.getItem('tareas') || '[]');
   return tareas;
 }
 
@@ -60,13 +71,13 @@ function cargarTareas() {
     const descTareaNode = document.createElement('p');
     nombreTareaNode.textContent = tarea.nombre;
     descTareaNode.textContent = tarea.descripcion;
-    tareaDiv.appendChild(nombreTareaNodo);
-    tareaDiv.appendChild(descTareaNodo);
+    tareaDiv.appendChild(nombreTareaNode);
+    tareaDiv.appendChild(descTareaNode);
     contenedorTareas.appendChild(tareaDiv);
   }
 }
 
 // Cargar las tareas al cargar la página
-window.addEventListener('cargar', function () {
+window.addEventListener('carga', function () {
   cargarTareas();
 });
