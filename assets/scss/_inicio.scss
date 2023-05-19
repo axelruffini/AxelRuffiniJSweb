@@ -33,7 +33,7 @@ main{
 
 .inicio_tarjeta2{
     margin: 30px auto;
-    @include tarjeta(300px, 30%, white)
+    @include tarjeta(1000px, 30%, white)
 
 }
 
@@ -82,4 +82,17 @@ input{
     padding: 10px 31px;
     text-decoration: none;
     margin-top: 2%;
+}
+
+.btn-cambiar-estado{
+    background-color: #2a14a7;
+    border-radius: 28px;
+    border: 1px solid #2a14a7;
+    display: inline-block;
+    color: #ffffff;
+    font-size: 16px;
+    padding: 10px 31px;
+    text-decoration: none;
+    margin-top: 2%;
+    margin-left: 2%;
 }

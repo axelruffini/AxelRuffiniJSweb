@@ -1,4 +1,3 @@
-
 // Obtener referencias a los elementos del DOM
 const formulario = document.querySelector('form');
 const nombreTareaInput = document.querySelector('#nombre-tarea');
@@ -33,6 +32,21 @@ function agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index) {
   tareaDiv.appendChild(botonEliminar);
 }
 
+// Función de orden superior para agregar funcionalidad de cambiar estado de la tarea
+function agregarFuncionalidadCambiarEstadoTarea(tareaDiv, tareas, index) {
+  const botonEstado = document.createElement('button');
+  botonEstado.textContent = 'Listo / Pendiente';
+  botonEstado.classList.add('btn-cambiar-estado');
+  botonEstado.addEventListener('click', async () => {
+    const tarea = tareas[index];
+    tarea.completed = !tarea.completed;
+    await guardarTareasEnStorage(tareas);
+    const descTareaNode = tareaDiv.querySelector('p');
+    descTareaNode.textContent = tarea.completed ? 'Completada' : 'Pendiente';
+  });
+  tareaDiv.appendChild(botonEstado);
+}
+
 // Maneja el evento de envío del formulario
 formulario.addEventListener('submit', async (evento) => {
   evento.preventDefault(); // Prevenir la recarga de la página
@@ -57,6 +71,7 @@ formulario.addEventListener('submit', async (evento) => {
       const tareas = await obtenerTareasDelStorage();
       const index = tareas.length;
       agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index);
+      agregarFuncionalidadCambiarEstadoTarea(tareaDiv, tareas, index);
       await guardarTareasEnStorage(tareas.concat({ nombre: nombreTareaTexto, descripcion: descTareaTexto }));
 
       // Limpiar los campos de nombre de tarea y descripción
@@ -103,6 +118,7 @@ async function cargarTareas() {
       // Agregar la funcionalidad de eliminar tarea
       const index = tareas.indexOf(tarea);
       agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index);
+      agregarFuncionalidadCambiarEstadoTarea(tareaDiv, tareas, index);
     }
   } catch (error) {
     console.error('Error:', error);
@@ -136,10 +152,10 @@ async function cargarTareas() {
       tareaDiv.appendChild(descTareaNode);
       contenedorTareas.appendChild(tareaDiv);
 
-
       // Agregar la funcionalidad de eliminar tarea
       const index = tareas.indexOf(tarea);
       agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index);
+      agregarFuncionalidadCambiarEstadoTarea(tareaDiv, tareas, index);
     }
   } catch (error) {
     console.error('Error:', error);
