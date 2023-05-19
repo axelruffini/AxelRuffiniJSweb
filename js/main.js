@@ -1,3 +1,4 @@
+
 // Obtener referencias a los elementos del DOM
 const formulario = document.querySelector('form');
 const nombreTareaInput = document.querySelector('#nombre-tarea');
@@ -57,7 +58,7 @@ formulario.addEventListener('submit', async (evento) => {
       const index = tareas.length;
       agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index);
       await guardarTareasEnStorage(tareas.concat({ nombre: nombreTareaTexto, descripcion: descTareaTexto }));
-      
+
       // Limpiar los campos de nombre de tarea y descripción
       nombreTareaInput.value = '';
       descTareaInput.value = '';
@@ -109,4 +110,40 @@ async function cargarTareas() {
 }
 
 // Cargar las tareas al cargar la página
+window.addEventListener('load', cargarTareas);
+
+// Agregar manejo de promesas con fetch usando JSONPlaceholder
+function obtenerTareas() {
+  return fetch('https://jsonplaceholder.typicode.com/todos')
+    .then(response => response.json())
+    .then(tareas => tareas.slice(0, 10))
+    .catch(error => {
+      console.error('Error:', error);
+      return [];
+    });
+}
+
+async function cargarTareas() {
+  try {
+    const tareas = await obtenerTareas();
+    for (const tarea of tareas) {
+      const tareaDiv = document.createElement('div');
+      const nombreTareaNode = document.createElement('h3');
+      const descTareaNode = document.createElement('p');
+      nombreTareaNode.textContent = tarea.title;
+      descTareaNode.textContent = tarea.completed ? 'Completada' : 'Pendiente';
+      tareaDiv.appendChild(nombreTareaNode);
+      tareaDiv.appendChild(descTareaNode);
+      contenedorTareas.appendChild(tareaDiv);
+
+
+      // Agregar la funcionalidad de eliminar tarea
+      const index = tareas.indexOf(tarea);
+      agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
 window.addEventListener('load', cargarTareas);
