@@ -1,75 +1,78 @@
-
 @import "mixin";
 
-body{
+body {
     background-color: #e4d1bc;
 }
 
-main{
+main {
     background-color: #efefef;
 }
 
-.t1{
-    @include textos(40px,center);
+.t1 {
+    @include textos(40px, center);
 }
 
-.t2{
-    @include textos(35px,center);
+.t2 {
+    @include textos(35px, center);
 }
 
-.t3{
-    @include textos(22px,center);
+.t3 {
+    @include textos(22px, center);
     margin-bottom: 10px
-
-}
-.t4{
-    @include textos(18px,justify);
 }
 
-.inicio_tarjeta1{
+.t4 {
+    @include textos(18px, justify);
+}
+
+.inicio_tarjeta1 {
     margin: 30px auto;
     @include tarjeta(150px, 30%, white)
 }
 
-.inicio_tarjeta2{
+.inicio_tarjeta2 {
     margin: 30px auto;
-    @include tarjeta(1000px, 30%, white)
-
+    @include tarjeta(auto, 30%, white)
 }
 
-.inicio_tarjeta3{
+.inicio_tarjeta3 {
     margin: 10px;
     @include tarjeta(8px, 10%, #ff502d)
 }
-.grupo_tarjetas{
+
+.grupo_tarjetas {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-input{
-    border-radius:20px; 
-    border-style:solid; 
-    border-width:3px; 
-    padding:8px; 
-    font-size:10px; 
-    text-align:left; 
-    background-color:#ffffff; 
-    border-color:#000000; 
+input {
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 3px;
+    padding: 8px;
+    font-size: 10px;
+    text-align: left;
+    background-color: #ffffff;
+    border-color: #000000;
+}
+
+.tarea{
+    padding-bottom: 5%;
 }
 
 .btn {
-	background-color:#44c767;
-	border-radius:28px;
-	border:1px solid #18ab29;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:16px;
-	padding:10px 31px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #2f6627;
+    background-color: #44c767;
+    border-radius: 28px;
+    border: 1px solid #18ab29;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 16px;
+    padding: 10px 31px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #2f6627;
 }
 
 .btn-eliminar {
@@ -84,7 +87,7 @@ input{
     margin-top: 2%;
 }
 
-.btn-cambiar-estado{
+.btn-cambiar-estado {
     background-color: #2a14a7;
     border-radius: 28px;
     border: 1px solid #2a14a7;

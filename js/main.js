@@ -144,6 +144,7 @@ async function cargarTareas() {
     const tareas = await obtenerTareas();
     for (const tarea of tareas) {
       const tareaDiv = document.createElement('div');
+      tareaDiv.classList.add('tarea'); // Agregar la clase "tarea"
       const nombreTareaNode = document.createElement('h3');
       const descTareaNode = document.createElement('p');
       nombreTareaNode.textContent = tarea.title;
@@ -161,5 +162,4 @@ async function cargarTareas() {
     console.error('Error:', error);
   }
 }
-
 window.addEventListener('load', cargarTareas);

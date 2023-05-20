@@ -59,7 +59,7 @@ main {
   text-align: start;
   padding: 30px;
   border-radius: 20px;
-  height: 1000px;
+  height: auto;
   width: 30%;
   background-color: white;
 }
@@ -90,6 +90,10 @@ input {
   text-align: left;
   background-color: #ffffff;
   border-color: #000000;
+}
+
+.tarea {
+  padding-bottom: 5%;
 }
 
 .btn {
