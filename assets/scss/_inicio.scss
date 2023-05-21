@@ -27,7 +27,7 @@ main {
 
 .inicio_tarjeta1 {
     margin: 30px auto;
-    @include tarjeta(150px, 30%, white)
+    @include tarjeta(auto, auto, white)
 }
 
 .inicio_tarjeta2 {
@@ -51,7 +51,7 @@ input {
     border-style: solid;
     border-width: 3px;
     padding: 8px;
-    font-size: 10px;
+    font-size: 20px;
     text-align: left;
     background-color: #ffffff;
     border-color: #000000;
@@ -85,6 +85,7 @@ input {
     padding: 10px 31px;
     text-decoration: none;
     margin-top: 2%;
+    margin-left: 10%;
 }
 
 .btn-cambiar-estado {

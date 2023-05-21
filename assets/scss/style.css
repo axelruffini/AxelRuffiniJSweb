@@ -48,8 +48,8 @@ main {
   text-align: start;
   padding: 30px;
   border-radius: 20px;
-  height: 150px;
-  width: 30%;
+  height: auto;
+  width: auto;
   background-color: white;
 }
 
@@ -86,7 +86,7 @@ input {
   border-style: solid;
   border-width: 3px;
   padding: 8px;
-  font-size: 10px;
+  font-size: 20px;
   text-align: left;
   background-color: #ffffff;
   border-color: #000000;
@@ -120,6 +120,7 @@ input {
   padding: 10px 31px;
   text-decoration: none;
   margin-top: 2%;
+  margin-left: 10%;
 }
 
 .btn-cambiar-estado {
