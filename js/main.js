@@ -3,7 +3,6 @@ const formulario = document.querySelector('form');
 const nombreTareaInput = document.querySelector('#nombre-tarea');
 const descTareaInput = document.querySelector('#desc-tarea');
 const contenedorTareas = document.querySelector('#contenedor-tareas');
-
 // Función de orden superior para agregar funcionalidad de eliminar tarea
 function agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index) {
   const botonEliminar = document.createElement('button');
@@ -31,7 +30,6 @@ function agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index) {
   });
   tareaDiv.appendChild(botonEliminar);
 }
-
 //  funcionalidad para cambiar estado la tarea
 function agregarFuncionalidadCambiarEstadoTarea(tareaDiv, tareas, index, estadoTareaNode) {
   const botonEstado = document.createElement('button');
@@ -45,7 +43,6 @@ function agregarFuncionalidadCambiarEstadoTarea(tareaDiv, tareas, index, estadoT
   });
   tareaDiv.appendChild(botonEstado);
 }
-
 // Maneja el evento de envío del formulario
 formulario.addEventListener('submit', async (evento) => {
   evento.preventDefault(); // Prevenir la recarga de la página
@@ -80,7 +77,6 @@ formulario.addEventListener('submit', async (evento) => {
     }
   }
 });
-
 // Obtiene las tareas almacenadas en el almacenamiento local
 function obtenerTareasDelStorage() {
   return new Promise((resolve, reject) => {
@@ -88,7 +84,36 @@ function obtenerTareasDelStorage() {
     resolve(tareas);
   });
 }
-
+// Obtiene la referencia al botón de borrar todas las tareas
+const btnBorrarTodas = document.querySelector('#btn-borrar-todas');
+// Función para borrar todas las tareas
+function borrarTodasLasTareas() {
+  // Eliminar todas las tareas del DOM
+  while (contenedorTareas.firstChild) {
+    contenedorTareas.removeChild(contenedorTareas.firstChild);
+  }
+  // Eliminar todas las tareas del almacenamiento local
+  localStorage.removeItem('tareas');
+}
+// Agregar el evento de clic al botón de borrar todas las tareas
+btnBorrarTodas.addEventListener('click', async () => {
+  const result = await Swal.fire({
+    icon: 'warning',
+    title: '¿Estás seguro?',
+    text: 'Esta acción eliminará todas las tareas',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, eliminar todas',
+    cancelButtonText: 'Cancelar'
+  });
+  if (result.isConfirmed) {
+    borrarTodasLasTareas();
+    Swal.fire(
+      '¡Eliminadas!',
+      'Todas las tareas han sido eliminadas.',
+      'success'
+    );
+  }
+});
 // Guarda las tareas en el almacenamiento local
 function guardarTareasEnStorage(tareas) {
   return new Promise((resolve, reject) => {
@@ -98,11 +123,8 @@ function guardarTareasEnStorage(tareas) {
     }, 0);
   });
 }
-
-
 // Carga las tareas al cargar la página
 window.addEventListener('load', cargarTareas);
-
 // Manejo de promesas con fetch usando JSONPlaceholder
 async function obtenerTareas() {
   const limite = 2; // Establece el límite de tareas que deseas obtener
@@ -110,15 +132,12 @@ async function obtenerTareas() {
   const tareas = await response.json();
   return tareas;
 }
-
-
 // Carga las tareas almacenadas en el almacenamiento local y mostrarlas en la página
 async function cargarTareas() {
   try {
     // Cargar tareas almacenadas localmente
     const tareasLocalStorage = await obtenerTareasDelStorage();
     mostrarTareas(tareasLocalStorage);
-
     // Cargar tareas de la API JSONPlaceholder
     const tareasAPI = await obtenerTareas();
     mostrarTareas(tareasAPI);
@@ -126,7 +145,6 @@ async function cargarTareas() {
     console.error('Error:', error);
   }
 }
-
 function mostrarTareas(tareas) {
   for (const tarea of tareas) {
     const tareaDiv = document.createElement('div');
@@ -135,16 +153,14 @@ function mostrarTareas(tareas) {
     const estadoTareaNode = document.createElement('span');
     nombreTareaNode.textContent = tarea.nombre || tarea.title;
     descTareaNode.textContent = tarea.descripcion || '';
-    estadoTareaNode.textContent = tarea.completed ? 'Completada' : 'Pendiente';
+    estadoTareaNode.textContent = tarea.completed ? 'Completo' : 'Pendiente';
     tareaDiv.appendChild(nombreTareaNode);
     tareaDiv.appendChild(descTareaNode);
     tareaDiv.appendChild(estadoTareaNode);
     contenedorTareas.appendChild(tareaDiv);
-
     const index = tareas.indexOf(tarea);
     agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index);
     agregarFuncionalidadCambiarEstadoTarea(tareaDiv, tareas, index, estadoTareaNode);
   }
 }
-
 window.addEventListener('load', cargarTareas);
