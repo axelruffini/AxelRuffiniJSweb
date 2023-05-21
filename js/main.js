@@ -1,9 +1,8 @@
-// Obtiene referencias a los elementos del DOM
 const formulario = document.querySelector('form');
 const nombreTareaInput = document.querySelector('#nombre-tarea');
 const descTareaInput = document.querySelector('#desc-tarea');
 const contenedorTareas = document.querySelector('#contenedor-tareas');
-// Función de orden superior para agregar funcionalidad de eliminar tarea
+
 function agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index) {
   const botonEliminar = document.createElement('button');
   botonEliminar.textContent = 'Eliminar';
@@ -20,7 +19,7 @@ function agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index) {
     if (result.isConfirmed) {
       tareaDiv.remove();
       tareas.splice(index, 1);
-      await guardarTareasEnStorage(tareas);
+      guardarTareasEnStorage(tareas);
       Swal.fire(
         '¡Eliminada!',
         'La tarea ha sido eliminada.',
@@ -29,47 +28,46 @@ function agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index) {
     }
   });
   tareaDiv.appendChild(botonEliminar);
-}
-//  funcionalidad para cambiar estado la tarea
-function agregarFuncionalidadCambiarEstadoTarea(tareaDiv, tareas, index, estadoTareaNode) {
+
+  const estadoTareaNode = document.createElement('p');
+  estadoTareaNode.classList.add('estado-tarea');
+  const estadoGuardado = obtenerEstadoTarea(tareas, index);
+  const estadoInicial = estadoGuardado ? estadoGuardado : 'Sin Terminar';
+  estadoTareaNode.textContent = `Estado: ${estadoInicial}`;
+  tareaDiv.appendChild(estadoTareaNode);
+
   const botonEstado = document.createElement('button');
-  botonEstado.textContent = 'Completado / Pendiente';
-  botonEstado.classList.add('btn-cambiar-estado');
-  botonEstado.addEventListener('click', async () => {
-    const tarea = tareas[index];
-    tarea.completed = !tarea.completed;
-    await guardarTareasEnStorage(tareas);
-    estadoTareaNode.textContent = tarea.completed ? 'Completada' : 'Pendiente';
+  botonEstado.textContent = 'Cambiar Estado';
+  botonEstado.classList.add('btn-estado'); 
+  botonEstado.addEventListener('click', () => {
+    tareaDiv.classList.toggle('terminada');
+    const estado = tareaDiv.classList.contains('terminada') ? 'Terminada' : 'Sin Terminar';
+    estadoTareaNode.textContent = `Estado: ${estado}`;
+    actualizarEstadoTarea(tareas, index, estado);
   });
   tareaDiv.appendChild(botonEstado);
 }
-// Maneja el evento de envío del formulario
+
 formulario.addEventListener('submit', async (evento) => {
-  evento.preventDefault(); // Prevenir la recarga de la página
-  // Obtiene el valor del campo de nombre de la tarea y descripción
+  evento.preventDefault();
   const nombreTareaTexto = nombreTareaInput.value.trim();
   const descTareaTexto = descTareaInput.value.trim();
   if (nombreTareaTexto && descTareaTexto) {
-    // Crea un nuevo elemento de div para la tarea y lo agrega al contenedor
     const tareaDiv = document.createElement('div');
     const nombreTareaNode = document.createElement('h3');
     const descTareaNode = document.createElement('p');
-    const estadoTareaNode = document.createElement('span'); // Agregar un elemento span para mostrar el estado de la tarea
     nombreTareaNode.textContent = nombreTareaTexto;
     descTareaNode.textContent = descTareaTexto;
-    estadoTareaNode.textContent = 'Pendiente'; // Establecer el estado inicial de la tarea como pendiente
     tareaDiv.appendChild(nombreTareaNode);
     tareaDiv.appendChild(descTareaNode);
-    tareaDiv.appendChild(estadoTareaNode); // Agregar el elemento span al div de la tarea
     contenedorTareas.appendChild(tareaDiv);
-    // Agrega la funcionalidad de eliminar tarea
+
     try {
-      const tareas = await obtenerTareasDelStorage();
+      const tareas = obtenerTareasDelStorage();
       const index = tareas.length;
       agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index);
-      agregarFuncionalidadCambiarEstadoTarea(tareaDiv, tareas, index, estadoTareaNode); // Pasar el elemento span como argumento
-      await guardarTareasEnStorage(tareas.concat({ nombre: nombreTareaTexto, descripcion: descTareaTexto, completed: false })); // Agregar el estado de la tarea como falso (pendiente)
-      // Limpiar los campos de nombre de tarea y descripción
+      guardarTareasEnStorage(tareas.concat({ nombre: nombreTareaTexto, descripcion: descTareaTexto }));
+      guardarEstadoTarea(tareas, index, 'Sin Terminar');
       nombreTareaInput.value = '';
       descTareaInput.value = '';
     } catch (error) {
@@ -77,25 +75,38 @@ formulario.addEventListener('submit', async (evento) => {
     }
   }
 });
-// Obtiene las tareas almacenadas en el almacenamiento local
+
 function obtenerTareasDelStorage() {
-  return new Promise((resolve, reject) => {
-    const tareas = JSON.parse(localStorage.getItem('tareas') || '[]');
-    resolve(tareas);
-  });
+  const tareas = JSON.parse(localStorage.getItem('tareas') || '[]');
+  return tareas;
 }
-// Obtiene la referencia al botón de borrar todas las tareas
+
+function guardarTareasEnStorage(tareas) {
+  localStorage.setItem('tareas', JSON.stringify(tareas));
+}
+
+function obtenerEstadoTarea(tareas, index) {
+  const estado = JSON.parse(localStorage.getItem(`estado_${index}`));
+  return estado;
+}
+
+function guardarEstadoTarea(tareas, index, estado) {
+  localStorage.setItem(`estado_${index}`, JSON.stringify(estado));
+}
+
+function actualizarEstadoTarea(tareas, index, estado) {
+  guardarEstadoTarea(tareas, index, estado);
+}
+
 const btnBorrarTodas = document.querySelector('#btn-borrar-todas');
-// Función para borrar todas las tareas
+
 function borrarTodasLasTareas() {
-  // Eliminar todas las tareas del DOM
   while (contenedorTareas.firstChild) {
     contenedorTareas.removeChild(contenedorTareas.firstChild);
   }
-  // Eliminar todas las tareas del almacenamiento local
-  localStorage.removeItem('tareas');
+  localStorage.clear();
 }
-// Agregar el evento de clic al botón de borrar todas las tareas
+
 btnBorrarTodas.addEventListener('click', async () => {
   const result = await Swal.fire({
     icon: 'warning',
@@ -114,16 +125,7 @@ btnBorrarTodas.addEventListener('click', async () => {
     );
   }
 });
-// Guarda las tareas en el almacenamiento local
-function guardarTareasEnStorage(tareas) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      localStorage.setItem('tareas', JSON.stringify(tareas));
-      resolve();
-    }, 0);
-  });
-}
-// Carga las tareas al cargar la página
+
 function obtenerTareas() {
   return fetch('https://jsonplaceholder.typicode.com/todos')
     .then(response => response.json())
@@ -133,35 +135,31 @@ function obtenerTareas() {
       return [];
     });
 }
-// Carga las tareas almacenadas en el almacenamiento local y mostrarlas en la página
+
 async function cargarTareas() {
   try {
-    // Cargar tareas almacenadas localmente
-    const tareasLocalStorage = await obtenerTareasDelStorage();
+    const tareasLocalStorage = obtenerTareasDelStorage();
     mostrarTareas(tareasLocalStorage);
-    // Cargar tareas de la API JSONPlaceholder
     const tareasAPI = await obtenerTareas();
     mostrarTareas(tareasAPI);
   } catch (error) {
     console.error('Error:', error);
   }
 }
+
 function mostrarTareas(tareas) {
   for (const tarea of tareas) {
     const tareaDiv = document.createElement('div');
     const nombreTareaNode = document.createElement('h3');
     const descTareaNode = document.createElement('p');
-    const estadoTareaNode = document.createElement('span');
     nombreTareaNode.textContent = tarea.nombre || tarea.title;
     descTareaNode.textContent = tarea.descripcion || '';
-    estadoTareaNode.textContent = tarea.completed ? 'Completo' : 'Pendiente';
     tareaDiv.appendChild(nombreTareaNode);
     tareaDiv.appendChild(descTareaNode);
-    tareaDiv.appendChild(estadoTareaNode);
     contenedorTareas.appendChild(tareaDiv);
     const index = tareas.indexOf(tarea);
     agregarFuncionalidadEliminarTarea(tareaDiv, tareas, index);
-    agregarFuncionalidadCambiarEstadoTarea(tareaDiv, tareas, index, estadoTareaNode);
   }
 }
+
 window.addEventListener('load', cargarTareas);
