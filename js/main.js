@@ -76,6 +76,8 @@ formulario.addEventListener('submit', async (evento) => {
   }
 });
 
+
+
 function obtenerTareasDelStorage() {
   const tareas = JSON.parse(localStorage.getItem('tareas') || '[]');
   return tareas;
@@ -142,7 +144,7 @@ async function cargarTareas() {
     mostrarTareas(tareasLocalStorage);
     const tareasAPI = await obtenerTareas();
     mostrarTareas(tareasAPI);
-  } catch (error) {
+  } catch (error) { 
     console.error('Error:', error);
   }
 }
@@ -163,3 +165,30 @@ function mostrarTareas(tareas) {
 }
 
 window.addEventListener('load', cargarTareas);
+
+function filtrarTareasPorNombre(tareas, nombre) {
+  return tareas.filter(tarea => tarea.nombre.toLowerCase().includes(nombre.toLowerCase()));
+}
+
+function limpiarContenedorTareas() {
+  while (contenedorTareas.firstChild) {
+    contenedorTareas.removeChild(contenedorTareas.firstChild);
+  }
+}
+
+function buscarTareas() {
+  const busquedaInput = document.querySelector('#busqueda');
+  const nombreBusqueda = busquedaInput.value.trim();
+  if (nombreBusqueda) {
+    const tareas = obtenerTareasDelStorage();
+    const tareasFiltradas = filtrarTareasPorNombre(tareas, nombreBusqueda);
+    limpiarContenedorTareas();
+    mostrarTareas(tareasFiltradas);
+  } else {
+    limpiarContenedorTareas();
+    mostrarTareas(obtenerTareasDelStorage());
+  }
+}
+
+const btnBuscar = document.querySelector('#btn-buscar');
+btnBuscar.addEventListener('click', buscarTareas);
