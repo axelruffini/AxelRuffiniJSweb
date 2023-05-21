@@ -124,13 +124,14 @@ function guardarTareasEnStorage(tareas) {
   });
 }
 // Carga las tareas al cargar la página
-window.addEventListener('load', cargarTareas);
-// Manejo de promesas con fetch usando JSONPlaceholder
-async function obtenerTareas() {
-  const limite = 2; // Establece el límite de tareas que deseas obtener
-  const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_limit=${limite}`);
-  const tareas = await response.json();
-  return tareas;
+function obtenerTareas() {
+  return fetch('https://jsonplaceholder.typicode.com/todos')
+    .then(response => response.json())
+    .then(tareas => tareas.slice(0, 2))
+    .catch(error => {
+      console.error('Error:', error);
+      return [];
+    });
 }
 // Carga las tareas almacenadas en el almacenamiento local y mostrarlas en la página
 async function cargarTareas() {
